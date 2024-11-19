@@ -38,7 +38,7 @@ export const resumeContext = createContext<Resume | null>(null);
 
 export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const [resume, setResume] = useState(intialState);
-	const [step, setStep] = useState(0);
+	const [step, setStep] = useState(1);
 	return (
 		<resumeContext.Provider value={{ step, setStep, setResume, ...resume }}>
 			{children}

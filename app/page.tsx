@@ -1,5 +1,5 @@
 import ToggleMode from "./components/toggle/toggleMode";
 
 export default function Home() {
-	return <ToggleMode />;
+	return <div></div>;
 }

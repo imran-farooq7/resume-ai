@@ -5,7 +5,11 @@ import React, { useContext } from "react";
 
 const CreateResume = () => {
 	const ctx = useContext(resumeContext);
-	return <div>{ctx?.step === 1 && <BasicInfo />}</div>;
+	return (
+		<div className="flex justify-center items-center h-screen">
+			{ctx?.step === 1 && <BasicInfo />}
+		</div>
+	);
 };
 
 export default CreateResume;

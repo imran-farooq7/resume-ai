@@ -20,6 +20,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" data-theme="light">
+			<head>
+				<script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
+			</head>
 			<body className={`${poppins.className} antialiased`}>
 				<ResumeProvider>
 					<Navbar />

@@ -3,6 +3,7 @@ import "./globals.css";
 import { Poppins } from "next/font/google";
 import Navbar from "./components/navbar/navbar";
 import { ResumeProvider } from "@/context/resume-context";
+import { ClerkProvider } from "@clerk/nextjs";
 const poppins = Poppins({
 	weight: ["400", "500", "700", "800", "900"],
 	subsets: ["latin"],
@@ -24,10 +25,12 @@ export default function RootLayout({
 				<script src="https://unpkg.com/react-scan/dist/auto.global.js" async />
 			</head>
 			<body className={`${poppins.className} antialiased`}>
-				<ResumeProvider>
-					<Navbar />
-					{children}
-				</ResumeProvider>
+				<ClerkProvider>
+					<ResumeProvider>
+						<Navbar />
+						{children}
+					</ResumeProvider>
+				</ClerkProvider>
 			</body>
 		</html>
 	);

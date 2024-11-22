@@ -16,7 +16,7 @@ const Navbar = async () => {
 				</Link>
 			</div>
 			<div className="flex-none space-x-3">
-				{user && <Link href={"/dashboard"}>Dashboard</Link>}
+				{user.userId && <Link href={"/dashboard"}>Dashboard</Link>}
 				<SignedOut>
 					<SignInButton />
 				</SignedOut>

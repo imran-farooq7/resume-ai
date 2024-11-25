@@ -19,4 +19,5 @@ model Resume {
   experience Json
   skills     Json
   education  Json
+  email      String @unique
 }

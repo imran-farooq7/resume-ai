@@ -3,9 +3,8 @@
 import prisma from "@/prisma/db";
 import { currentUser } from "@clerk/nextjs/server";
 
-export const saveResume = async ({
+export const saveResumeData = async ({
 	title,
-	job,
 	address,
 	themeColor,
 	skills,
@@ -13,6 +12,7 @@ export const saveResume = async ({
 	education,
 	name,
 	summary,
+	phone,
 }: {
 	title: any;
 	job: any;
@@ -23,8 +23,10 @@ export const saveResume = async ({
 	education: any;
 	name: any;
 	summary: any;
+	phone: any;
 }) => {
 	const user = await currentUser();
+	console.log(user);
 	if (!user?.emailAddresses) {
 		return {
 			status: "error",
@@ -38,12 +40,12 @@ export const saveResume = async ({
 				address,
 				education,
 				experience,
-				job,
 				name,
 				skills,
 				summary,
 				themeColor,
 				title,
+				phone,
 			},
 		});
 		if (resumeData) {

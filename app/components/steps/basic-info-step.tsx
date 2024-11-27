@@ -1,8 +1,10 @@
 import { resumeContext } from "@/context/resume-context";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import React, { FormEvent, useContext } from "react";
 
 const BasicInfo = () => {
 	const ctx = useContext(resumeContext);
+	const { isSignedIn } = useUser();
 	const { name, setResume, title, address, email, phone, setStep, saveResume } =
 		ctx!;
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -80,7 +82,13 @@ const BasicInfo = () => {
 					}
 					required
 				/>
-				<button className="btn btn-neutral">Save</button>
+				{isSignedIn ? (
+					<button className="btn btn-neutral">Save</button>
+				) : (
+					<SignInButton>
+						<button className="btn btn-neutral">Signin to save info</button>
+					</SignInButton>
+				)}
 			</div>
 		</form>
 	);

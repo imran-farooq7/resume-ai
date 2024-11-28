@@ -1,6 +1,6 @@
 import { resumeContext } from "@/context/resume-context";
 import { SignInButton, useUser } from "@clerk/nextjs";
-import React, { FormEvent, useContext } from "react";
+import React, { ChangeEvent, FormEvent, useContext } from "react";
 
 const BasicInfo = () => {
 	const ctx = useContext(resumeContext);
@@ -11,7 +11,17 @@ const BasicInfo = () => {
 		e.preventDefault();
 		saveResume();
 	};
-
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setResume((resume) => {
+			const updatedResume = {
+				...resume,
+				[name]: value,
+			};
+			localStorage.setItem("resume", JSON.stringify(updatedResume));
+			return updatedResume;
+		});
+	};
 	return (
 		<form onSubmit={handleSubmit}>
 			<div className="flex flex-col gap-y-4">
@@ -19,54 +29,38 @@ const BasicInfo = () => {
 
 				<input
 					type="text"
+					name="name"
 					placeholder="Your name"
 					value={name}
 					className="input input-bordered w-full max-w-xs"
-					onChange={(e) =>
-						setResume((resume) => ({
-							...resume,
-							name: e.target.value,
-						}))
-					}
+					onChange={handleChange}
 					required
 				/>
 				<input
 					type="text"
-					placeholder="title title"
+					placeholder="title"
+					name="title"
 					className="input input-bordered w-full max-w-xs"
 					value={title}
-					onChange={(e) =>
-						setResume((resume) => ({
-							...resume,
-							title: e.target.value,
-						}))
-					}
+					onChange={handleChange}
 					required
 				/>
 				<input
 					type="text"
 					placeholder="Address"
+					name="address"
 					className="input input-bordered w-full max-w-xs"
 					value={address}
-					onChange={(e) =>
-						setResume((resume) => ({
-							...resume,
-							address: e.target.value,
-						}))
-					}
+					onChange={handleChange}
 					required
 				/>
 				<input
 					type="email"
 					placeholder="Email Address"
+					name="email"
 					className="input input-bordered w-full max-w-xs"
 					value={email}
-					onChange={(e) =>
-						setResume((resume) => ({
-							...resume,
-							email: e.target.value,
-						}))
-					}
+					onChange={handleChange}
 					required
 				/>
 				<input
@@ -74,12 +68,8 @@ const BasicInfo = () => {
 					placeholder="Phone Number"
 					className="input input-bordered w-full max-w-xs"
 					value={phone}
-					onChange={(e) =>
-						setResume((resume) => ({
-							...resume,
-							phone: e.target.value,
-						}))
-					}
+					name="phone"
+					onChange={handleChange}
 					required
 				/>
 				{isSignedIn ? (

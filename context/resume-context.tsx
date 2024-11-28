@@ -26,6 +26,7 @@ import {
 	Dispatch,
 	ReactNode,
 	SetStateAction,
+	useEffect,
 	useState,
 } from "react";
 const intialState = {
@@ -41,6 +42,12 @@ export const resumeContext = createContext<Resume | null>(null);
 export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const [resume, setResume] = useState(intialState);
 	const [step, setStep] = useState(1);
+	useEffect(() => {
+		const savedResumeData = localStorage.getItem("resume");
+		if (savedResumeData) {
+			setResume(JSON.parse(savedResumeData));
+		}
+	}, []);
 	const saveResume = async () => {
 		try {
 			const res = await saveResumeData({

@@ -29,6 +29,7 @@ import {
 	useEffect,
 	useState,
 } from "react";
+import toast from "react-hot-toast";
 const intialState = {
 	name: "",
 	address: "",
@@ -60,10 +61,10 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			});
 			if (res?.status === "success") {
 				setResume({ ...res.data! });
-				alert("Success");
+				toast.success(res.message);
 			}
 			if (res?.status === "error") {
-				alert("Error");
+				toast.error(res.message);
 			}
 		} catch (error) {
 			alert("An error occurred");

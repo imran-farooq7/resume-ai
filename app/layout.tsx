@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import Navbar from "./components/navbar/navbar";
 import { ResumeProvider } from "@/context/resume-context";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "react-hot-toast";
 const poppins = Poppins({
 	weight: ["400", "500", "700", "800", "900"],
 	subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
 					<ResumeProvider>
 						<Navbar />
 						{children}
+						<Toaster />
 					</ResumeProvider>
 				</ClerkProvider>
 			</body>

@@ -26,7 +26,7 @@ export default function RootLayout({
 				<ClerkProvider>
 					<ResumeProvider>
 						<Navbar />
-						{children}
+						<main className="mt-20 max-w-7xl mx-auto">{children}</main>
 						<Toaster />
 					</ResumeProvider>
 				</ClerkProvider>

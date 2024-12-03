@@ -63,3 +63,30 @@ export const saveResumeData = async ({
 		};
 	}
 };
+export const getUserResumes = async () => {
+	const user = await currentUser();
+	if (!user?.emailAddresses[0].emailAddress) {
+		return {
+			status: "error",
+			message: "User not found",
+		};
+	}
+	try {
+		const resumes = await prisma.resume.findMany({
+			where: {
+				email: user.emailAddresses[0].emailAddress,
+			},
+		});
+		return {
+			resumes,
+			status: "success",
+			message: "Resumes fetched successfully",
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			status: "error",
+			message: "Error fetching resumes",
+		};
+	}
+};

@@ -65,6 +65,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				setResume({ ...res.data! });
 				toast.success(res.message);
 				router.push(`/dashboard/resume/edit/${res.data?.id}`);
+				setStep(2);
 			}
 			if (res?.status === "error") {
 				toast.error(res.message);

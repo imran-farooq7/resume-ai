@@ -21,6 +21,7 @@ interface Resume {
 	>;
 }
 import { saveResumeData } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 import {
 	createContext,
 	Dispatch,
@@ -43,6 +44,7 @@ export const resumeContext = createContext<Resume | null>(null);
 export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const [resume, setResume] = useState(intialState);
 	const [step, setStep] = useState(1);
+	const router = useRouter();
 	useEffect(() => {
 		const savedResumeData = localStorage.getItem("resume");
 		if (savedResumeData) {
@@ -62,6 +64,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			if (res?.status === "success") {
 				setResume({ ...res.data! });
 				toast.success(res.message);
+				router.push(`/dashboard/resume/edit/${res.data?.id}`);
 			}
 			if (res?.status === "error") {
 				toast.error(res.message);

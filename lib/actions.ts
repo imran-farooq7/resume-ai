@@ -13,6 +13,7 @@ export const saveResumeData = async ({
 	name,
 	summary,
 	phone,
+	email,
 }: {
 	title: any;
 	job: any;
@@ -24,28 +25,32 @@ export const saveResumeData = async ({
 	name: any;
 	summary: any;
 	phone: any;
+	email: any;
 }) => {
 	const user = await currentUser();
-	console.log(user);
 	if (!user?.emailAddresses) {
 		return {
 			status: "error",
 			message: "you must be login to save resume data",
 		};
 	}
+	const data = {
+		title,
+		address,
+		themeColor,
+		skills,
+		experience,
+		education,
+		name,
+		summary,
+		phone,
+		email,
+		userEmail: user.emailAddresses[0].emailAddress,
+	};
 	try {
 		const resumeData = await prisma.resume.create({
 			data: {
-				email: user.emailAddresses[0].emailAddress,
-				address,
-				education,
-				experience,
-				name,
-				skills,
-				summary,
-				themeColor,
-				title,
-				phone,
+				...data,
 			},
 		});
 		if (resumeData) {
@@ -56,7 +61,7 @@ export const saveResumeData = async ({
 			};
 		}
 	} catch (error) {
-		console.log(error);
+		console.log(error, "Error");
 		return {
 			status: "error",
 			message: "something went wrong",
@@ -79,6 +84,34 @@ export const getUserResumes = async () => {
 		});
 		return {
 			resumes,
+			status: "success",
+			message: "Resumes fetched successfully",
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			status: "error",
+			message: "Error fetching resumes",
+		};
+	}
+};
+export const getResumeById = async (id: string) => {
+	const user = await currentUser();
+	if (!user?.emailAddresses[0].emailAddress) {
+		return {
+			status: "error",
+			message: "User not found",
+		};
+	}
+	try {
+		const resume = await prisma.resume.findUnique({
+			where: {
+				email: user.emailAddresses[0].emailAddress,
+				id,
+			},
+		});
+		return {
+			resume,
 			status: "success",
 			message: "Resumes fetched successfully",
 		};

@@ -15,6 +15,7 @@ const PersonalInfo = ({ resume }: { resume: Resume }) => {
 				<p className="text-center text-sm">{resume.phone}</p>
 				<p className="text-center text-sm">{resume.email}</p>
 			</div>
+			<hr />
 		</div>
 	);
 };

@@ -6,9 +6,8 @@ const ResumeCard = ({ resume }: { resume: Resume }) => {
 	return (
 		<Link
 			href={`/dashboard/resume/edit/${resume.id}`}
-			className={`shadow-lg space-y-4 w-full min-h-52 p-4 border-b-[10px] border-${[
-				resume.themeColor,
-			]}`}
+			className={`shadow-lg space-y-4 w-full min-h-52 p-4 border-b-[10px]`}
+			style={{ borderColor: resume.themeColor }}
 		>
 			<PersonalInfo resume={resume} />
 		</Link>

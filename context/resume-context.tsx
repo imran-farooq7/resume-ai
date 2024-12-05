@@ -20,13 +20,14 @@ interface Resume {
 		}>
 	>;
 }
-import { saveResumeData } from "@/lib/actions";
-import { useRouter } from "next/navigation";
+import { getResumeById, saveResumeData } from "@/lib/actions";
+import { useParams, useRouter } from "next/navigation";
 import {
 	createContext,
 	Dispatch,
 	ReactNode,
 	SetStateAction,
+	use,
 	useEffect,
 	useState,
 } from "react";
@@ -45,12 +46,24 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const [resume, setResume] = useState(intialState);
 	const [step, setStep] = useState(1);
 	const router = useRouter();
+	const params = useParams<{ id: string }>();
 	useEffect(() => {
 		const savedResumeData = localStorage.getItem("resume");
 		if (savedResumeData) {
 			setResume(JSON.parse(savedResumeData));
 		}
 	}, []);
+	useEffect(() => {
+		if (params.id) {
+			getResume();
+		}
+	}, [params.id]);
+	const getResume = async () => {
+		const { resume } = await getResumeById(params.id);
+		if (resume) {
+			setResume(resume);
+		}
+	};
 	const saveResume = async () => {
 		try {
 			const res = await saveResumeData({
@@ -61,8 +74,10 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				job: "",
 				...resume,
 			});
+			console.log(res);
 			if (res?.status === "success") {
 				setResume({ ...res.data! });
+				localStorage.removeItem("resume");
 				toast.success(res.message);
 				router.push(`/dashboard/resume/edit/${res.data?.id}`);
 				setStep(2);
@@ -71,7 +86,8 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				toast.error(res.message);
 			}
 		} catch (error) {
-			alert("An error occurred");
+			console.log(error);
+			toast.error("An error occurred while saving");
 		}
 	};
 	return (

@@ -123,3 +123,38 @@ export const getResumeById = async (id: string) => {
 		};
 	}
 };
+const checkResumeOwner = async (resumeId: string) => {
+	const user = await currentUser();
+	if (!user) {
+		return {
+			status: "error",
+			message: "User not found",
+		};
+	}
+	try {
+		const resume = await prisma.resume.findFirst({
+			where: {
+				id: resumeId,
+			},
+		});
+		if (!resume) {
+			return {
+				status: "error",
+				message: "Resume not found",
+			};
+		}
+		if (resume.userEmail !== user.emailAddresses[0].emailAddress) {
+			return {
+				status: "error",
+				message: "Unauthorized",
+			};
+		}
+		return true;
+	} catch (error) {
+		console.log(error);
+		return {
+			status: "error",
+			message: "Something went wrong",
+		};
+	}
+};

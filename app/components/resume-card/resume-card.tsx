@@ -1,6 +1,7 @@
 import { Resume } from "@prisma/client";
 import PersonalInfo from "../personal-info/personal-info";
 import Link from "next/link";
+import SummaryInfo from "../summary/summary-info";
 
 const ResumeCard = ({ resume }: { resume: Resume }) => {
 	return (
@@ -10,6 +11,7 @@ const ResumeCard = ({ resume }: { resume: Resume }) => {
 			style={{ borderColor: resume.themeColor }}
 		>
 			<PersonalInfo resume={resume} />
+			<SummaryInfo resume={resume} />
 		</Link>
 	);
 };

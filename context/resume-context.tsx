@@ -7,6 +7,7 @@ interface Resume {
 	phone: string;
 	email: string;
 	step: number;
+	summary: string;
 	saveResume: () => Promise<void>;
 	setStep: Dispatch<SetStateAction<number>>;
 	setResume: Dispatch<
@@ -17,6 +18,7 @@ interface Resume {
 			title: string;
 			phone: string;
 			themeColor: string;
+			summary: string;
 		}>
 	>;
 	updateResume: () => Promise<void>;
@@ -40,6 +42,7 @@ const intialState = {
 	title: "",
 	phone: "",
 	themeColor: "",
+	summary: "",
 };
 export const resumeContext = createContext<Resume | null>(null);
 
@@ -71,11 +74,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				education: [],
 				experience: [],
 				skills: [],
-				summary: "",
 				job: "",
 				...resume,
 			});
-			console.log(res);
 			if (res?.status === "success") {
 				setResume({ ...res.data! });
 				localStorage.removeItem("resume");
@@ -96,7 +97,6 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			const res = await updateResumeById(resume);
 			setResume(res?.data!);
 			toast.success(res?.message!);
-			setStep(3);
 		} catch (error) {
 			toast.error("An error occurred while updating resume");
 		}

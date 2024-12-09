@@ -1,9 +1,9 @@
 "use client";
 import BasicInfoCreate from "@/app/components/steps/basic-info-create";
-import BasicInfo from "@/app/components/steps/basic-info-step";
 import StepsNav from "@/app/components/steps/steps-nav";
+import Summary from "@/app/components/steps/summary";
 import { resumeContext } from "@/context/resume-context";
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 const CreateResume = () => {
 	const ctx = useContext(resumeContext);
@@ -11,6 +11,7 @@ const CreateResume = () => {
 		<div className="flex flex-col gap-4 justify-center items-center h-screen">
 			<StepsNav />
 			{ctx?.step === 1 && <BasicInfoCreate />}
+			{ctx?.step === 2 && <Summary />}
 		</div>
 	);
 };

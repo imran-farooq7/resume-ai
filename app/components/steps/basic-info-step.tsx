@@ -5,11 +5,21 @@ import React, { ChangeEvent, FormEvent, useContext } from "react";
 const BasicInfo = () => {
 	const ctx = useContext(resumeContext);
 	const { isSignedIn } = useUser();
-	const { name, setResume, title, address, email, phone, setStep, saveResume } =
-		ctx!;
+	const {
+		name,
+		setResume,
+		title,
+		address,
+		email,
+		phone,
+		saveResume,
+		updateResume,
+		setStep,
+	} = ctx!;
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		saveResume();
+		updateResume();
+		setStep(2);
 	};
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;

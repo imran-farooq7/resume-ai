@@ -19,8 +19,9 @@ interface Resume {
 			themeColor: string;
 		}>
 	>;
+	updateResume: () => Promise<void>;
 }
-import { getResumeById, saveResumeData } from "@/lib/actions";
+import { getResumeById, saveResumeData, updateResumeById } from "@/lib/actions";
 import { useParams, useRouter } from "next/navigation";
 import {
 	createContext,
@@ -90,9 +91,19 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			toast.error("An error occurred while saving");
 		}
 	};
+	const updateResume = async () => {
+		try {
+			const res = await updateResumeById(resume);
+			setResume(res?.data!);
+			toast.success(res?.message!);
+			setStep(3);
+		} catch (error) {
+			toast.error("An error occurred while updating resume");
+		}
+	};
 	return (
 		<resumeContext.Provider
-			value={{ step, setStep, setResume, saveResume, ...resume }}
+			value={{ step, setStep, setResume, saveResume, updateResume, ...resume }}
 		>
 			{children}
 		</resumeContext.Provider>

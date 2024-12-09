@@ -158,3 +158,30 @@ const checkResumeOwner = async (resumeId: string) => {
 		};
 	}
 };
+export const updateResumeById = async (resumeData: any) => {
+	const { id, ...rest } = resumeData;
+	try {
+		await checkResumeOwner(resumeData.id);
+		const resume = await prisma.resume.update({
+			where: {
+				id,
+			},
+			data: {
+				...rest,
+			},
+		});
+		if (resume) {
+			return {
+				status: "success",
+				message: "Resume was successfully updated",
+				data: resume,
+			};
+		}
+	} catch (error) {
+		console.log(error);
+		return {
+			status: "error",
+			message: "An error occurred while updating the resume",
+		};
+	}
+};

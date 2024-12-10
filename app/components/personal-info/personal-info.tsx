@@ -1,6 +1,10 @@
 import { Resume } from "@prisma/client";
 
-const PersonalInfo = ({ resume }: { resume: Resume }) => {
+const PersonalInfo = ({
+	resume,
+}: {
+	resume: Omit<Resume, "id" | "userEmail" | "created_at">;
+}) => {
 	return (
 		<div>
 			<h2

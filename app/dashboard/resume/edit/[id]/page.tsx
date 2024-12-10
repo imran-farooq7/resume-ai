@@ -1,4 +1,5 @@
 "use client";
+import PreviewCard from "@/app/components/preview-card/preview-card";
 import BasicInfo from "@/app/components/steps/basic-info-step";
 import StepsNav from "@/app/components/steps/steps-nav";
 import Summary from "@/app/components/steps/summary";
@@ -9,10 +10,13 @@ const ResumeEditPage = () => {
 	const ctx = useContext(resumeContext);
 	// const resume = use(getResumeById(id));
 	return (
-		<div className="flex flex-col gap-4 justify-center items-center h-screen">
-			<StepsNav />
-			{ctx?.step === 1 && <BasicInfo />}
-			{ctx?.step === 2 && <Summary />}
+		<div className="grid grid-cols-1 md:grid-cols-2 place-items-center">
+			<div className="flex flex-col gap-4 justify-center items-center">
+				<StepsNav />
+				{ctx?.step === 1 && <BasicInfo />}
+				{ctx?.step === 2 && <Summary />}
+			</div>
+			<PreviewCard />
 		</div>
 	);
 };

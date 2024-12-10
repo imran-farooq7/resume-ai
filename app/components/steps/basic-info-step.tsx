@@ -33,7 +33,7 @@ const BasicInfo = () => {
 		});
 	};
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={handleSubmit} className="w-full">
 			<div className="flex flex-col gap-y-4">
 				<h2 className="text-2xl font-bold">Personal information</h2>
 
@@ -42,7 +42,7 @@ const BasicInfo = () => {
 					name="name"
 					placeholder="Your name"
 					value={name}
-					className="input input-bordered w-full max-w-xs"
+					className="input input-bordered w-full"
 					onChange={handleChange}
 					required
 				/>
@@ -50,7 +50,7 @@ const BasicInfo = () => {
 					type="text"
 					placeholder="title"
 					name="title"
-					className="input input-bordered w-full max-w-xs"
+					className="input input-bordered w-full"
 					value={title}
 					onChange={handleChange}
 					required
@@ -59,7 +59,7 @@ const BasicInfo = () => {
 					type="text"
 					placeholder="Address"
 					name="address"
-					className="input input-bordered w-full max-w-xs"
+					className="input input-bordered w-full"
 					value={address}
 					onChange={handleChange}
 					required
@@ -68,7 +68,7 @@ const BasicInfo = () => {
 					type="email"
 					placeholder="Email Address"
 					name="email"
-					className="input input-bordered w-full max-w-xs"
+					className="input input-bordered w-full"
 					value={email}
 					onChange={handleChange}
 					required
@@ -76,7 +76,7 @@ const BasicInfo = () => {
 				<input
 					type="number"
 					placeholder="Phone Number"
-					className="input input-bordered w-full max-w-xs"
+					className="input input-bordered w-full"
 					value={phone}
 					name="phone"
 					onChange={handleChange}

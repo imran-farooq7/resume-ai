@@ -24,7 +24,7 @@ interface Resume {
 	updateResume: () => Promise<void>;
 }
 import { getResumeById, saveResumeData, updateResumeById } from "@/lib/actions";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import {
 	createContext,
 	Dispatch,
@@ -48,6 +48,7 @@ export const resumeContext = createContext<Resume | null>(null);
 
 export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const [resume, setResume] = useState(intialState);
+	const pathName = usePathname();
 	const [step, setStep] = useState(1);
 	const router = useRouter();
 	const params = useParams<{ id: string }>();
@@ -55,6 +56,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		const savedResumeData = localStorage.getItem("resume");
 		if (savedResumeData) {
 			setResume(JSON.parse(savedResumeData));
+		}
+		if (pathName.includes("/create")) {
+			setResume(intialState);
 		}
 	}, []);
 	useEffect(() => {

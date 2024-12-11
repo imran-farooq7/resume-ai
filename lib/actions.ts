@@ -2,6 +2,9 @@
 "use server";
 import prisma from "@/prisma/db";
 import { currentUser } from "@clerk/nextjs/server";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY!);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const saveResumeData = async ({
 	title,
@@ -182,6 +185,19 @@ export const updateResumeById = async (resumeData: any) => {
 		return {
 			status: "error",
 			message: "An error occurred while updating the resume",
+		};
+	}
+};
+export const generateResumeSummary = async (prompt: string) => {
+	try {
+		const res = await model.generateContent(prompt);
+		const text = await res.response.text();
+		return text;
+	} catch (error) {
+		console.log(error);
+		return {
+			status: "error",
+			message: "An error occurred while generating the resume summary",
 		};
 	}
 };

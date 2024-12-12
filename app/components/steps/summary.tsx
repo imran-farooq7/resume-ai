@@ -1,22 +1,50 @@
 import { resumeContext } from "@/context/resume-context";
 import { generateResumeSummary } from "@/lib/actions";
-import React, { useContext } from "react";
+import { title } from "process";
+import React, { useContext, useState } from "react";
+import toast from "react-hot-toast";
 
 const Summary = () => {
 	const ctx = useContext(resumeContext);
-	const { setResume, updateResume, summary, setStep } = ctx!;
+	const [loading, setLoading] = useState(false);
+	const { setResume, updateResume, summary, setStep, title } = ctx!;
 	const handleSubmit = async () => {
 		updateResume();
 		setStep(3);
 	};
-	const handleSummaryGenerate = async () => {};
+	const handleSummaryGenerate = async () => {
+		setLoading(true);
+		if (!title) {
+			toast.error("Provide job title in order to generate summary");
+			setLoading(false);
+			return;
+		}
+		try {
+			const res = await generateResumeSummary(
+				`generate resume summary for the person with following job title ${title}`
+			);
+			if (res.status === "success") {
+				setResume((resume) => ({
+					...resume,
+					summary: res.text!,
+				}));
+			}
+		} catch (error) {
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	return (
 		<div className="space-y-2">
 			<div className="flex justify-between items-center my-2">
 				<h2 className="text-2xl font-bold">Summary</h2>
 				<button className="btn btn-neutral" onClick={handleSummaryGenerate}>
-					Generate Summary With AI
+					{loading ? (
+						<span className="animate-pulse">Generating...</span>
+					) : (
+						"Generate Summary With AI"
+					)}
 				</button>
 			</div>
 			<textarea

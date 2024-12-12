@@ -192,7 +192,10 @@ export const generateResumeSummary = async (prompt: string) => {
 	try {
 		const res = await model.generateContent(prompt);
 		const text = await res.response.text();
-		return text;
+		return {
+			status: "success",
+			text,
+		};
 	} catch (error) {
 		console.log(error);
 		return {

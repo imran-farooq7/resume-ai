@@ -1,4 +1,5 @@
 "use client";
+
 interface Resume {
 	name: string;
 	title: string;
@@ -7,6 +8,7 @@ interface Resume {
 	phone: string;
 	email: string;
 	step: number;
+	experience: any;
 	summary: string;
 	saveResume: () => Promise<void>;
 	setStep: Dispatch<SetStateAction<number>>;
@@ -19,18 +21,26 @@ interface Resume {
 			phone: string;
 			themeColor: string;
 			summary: string;
+			experience: any;
 		}>
 	>;
+	experiences: any[];
+	handleResumeChange: (e: FormEvent<HTMLInputElement>, index: number) => void;
 	updateResume: () => Promise<void>;
+	handleResumeQuill: (value: any, index: any) => void;
+	handleExperienceSubmit: () => void;
+	addExperience: () => void;
+	removeExperience: () => void;
 }
 import { getResumeById, saveResumeData, updateResumeById } from "@/lib/actions";
+import { JsonValue } from "@prisma/client/runtime/library";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import {
 	createContext,
 	Dispatch,
+	FormEvent,
 	ReactNode,
 	SetStateAction,
-	use,
 	useEffect,
 	useState,
 } from "react";
@@ -43,6 +53,7 @@ const intialState = {
 	phone: "",
 	themeColor: "",
 	summary: "",
+	experience: [] as JsonValue,
 };
 export const resumeContext = createContext<Resume | null>(null);
 
@@ -52,6 +63,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const [step, setStep] = useState(1);
 	const router = useRouter();
 	const params = useParams<{ id: string }>();
+	const [experiences, setExperiences] = useState<any[]>([]);
 	useEffect(() => {
 		const savedResumeData = localStorage.getItem("resume");
 		if (savedResumeData) {
@@ -72,11 +84,29 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			setResume(resume);
 		}
 	};
+	useEffect(() => {
+		if (resume.experience) {
+			setExperiences(resume.experience as any);
+		}
+	}, [resume]);
+	const handleResumeChange = (
+		e: FormEvent<HTMLInputElement>,
+		index: number
+	) => {};
+	const handleResumeQuill = (value, index) => {
+		//
+	};
+	const handleExperienceSubmit = () => {
+		//
+	};
+	const addExperience = () => {
+		//
+	};
+	const removeExperience = () => {};
 	const saveResume = async () => {
 		try {
 			const res = await saveResumeData({
 				education: [],
-				experience: [],
 				skills: [],
 				job: "",
 				...resume,
@@ -107,7 +137,20 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	};
 	return (
 		<resumeContext.Provider
-			value={{ step, setStep, setResume, saveResume, updateResume, ...resume }}
+			value={{
+				step,
+				setStep,
+				setResume,
+				saveResume,
+				updateResume,
+				experiences,
+				handleResumeChange,
+				addExperience,
+				handleExperienceSubmit,
+				handleResumeQuill,
+				removeExperience,
+				...resume,
+			}}
 		>
 			{children}
 		</resumeContext.Provider>

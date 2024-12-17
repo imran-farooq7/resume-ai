@@ -49,6 +49,20 @@ const Experience = () => {
 				>
 					Add
 				</button>
+				{experiences.length > 1 && (
+					<button
+						onClick={removeExperience}
+						className="btn btn-error text-white min-w-20"
+					>
+						Remove
+					</button>
+				)}
+				<button
+					onClick={handleExperienceSubmit}
+					className="btn btn-success text-white min-w-20"
+				>
+					Next
+				</button>
 			</div>
 		</div>
 	);

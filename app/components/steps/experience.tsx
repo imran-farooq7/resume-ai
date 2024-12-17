@@ -38,6 +38,37 @@ const Experience = () => {
 									onChange={(e) => handleResumeChange(e.target.value, i)}
 									required
 								/>
+								<input
+									type="date"
+									name="startDate"
+									placeholder="Start date"
+									value={exp.startDate}
+									className="input input-bordered w-full"
+									onChange={(e) => handleResumeChange(e.target.value, i)}
+									required
+								/>
+								<input
+									type="date"
+									name="endDate"
+									placeholder="End date"
+									value={exp.endDate}
+									className="input input-bordered w-full"
+									onChange={(e) => handleResumeChange(e.target.value, i)}
+									required
+								/>
+								<div className="relative">
+									<textarea
+										placeholder="Write brief summary about yourself"
+										className="textarea textarea-bordered textarea-lg w-full"
+										onChange={(e) => handleResumeChange(e.target.value, i)}
+										rows={5}
+										cols={40}
+										value={exp.summary}
+									/>
+									<button className="btn bottom-5 right-5 btn-success text-white min-w-20 absolute">
+										Generate With AI
+									</button>
+								</div>
 							</div>
 						);
 					})}

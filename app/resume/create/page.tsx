@@ -1,5 +1,6 @@
 "use client";
 import BasicInfoCreate from "@/app/components/steps/basic-info-create";
+import Experience from "@/app/components/steps/experience";
 import StepsNav from "@/app/components/steps/steps-nav";
 import Summary from "@/app/components/steps/summary";
 import { resumeContext } from "@/context/resume-context";
@@ -12,6 +13,7 @@ const CreateResume = () => {
 			<StepsNav />
 			{ctx?.step === 1 && <BasicInfoCreate />}
 			{ctx?.step === 2 && <Summary />}
+			{ctx?.step === 3 && <Experience />}
 		</div>
 	);
 };

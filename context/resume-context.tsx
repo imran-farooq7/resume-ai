@@ -25,7 +25,7 @@ interface Resume {
 		}>
 	>;
 	experiences: any[];
-	handleResumeChange: (e: FormEvent<HTMLInputElement>, index: number) => void;
+	handleResumeChange: (val: string, index: number) => void;
 	updateResume: () => Promise<void>;
 	handleResumeQuill: (value: any, index: any) => void;
 	handleExperienceSubmit: () => void;
@@ -60,7 +60,7 @@ export const resumeContext = createContext<Resume | null>(null);
 export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const [resume, setResume] = useState(intialState);
 	const pathName = usePathname();
-	const [step, setStep] = useState(1);
+	const [step, setStep] = useState(3);
 	const router = useRouter();
 	const params = useParams<{ id: string }>();
 	const [experiences, setExperiences] = useState<any[]>([]);
@@ -89,20 +89,28 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			setExperiences(resume.experience as any);
 		}
 	}, [resume]);
-	const handleResumeChange = (
-		e: FormEvent<HTMLInputElement>,
-		index: number
-	) => {};
-	const handleResumeQuill = (value, index) => {
+	const handleResumeChange = (val: string, index: number) => {};
+	const handleResumeQuill = (value: any, index: number) => {
 		//
 	};
 	const handleExperienceSubmit = () => {
 		//
 	};
 	const addExperience = () => {
-		//
+		const newExperience = {
+			title: "",
+			company: "",
+			startDate: "",
+			endDate: "",
+			summary: "",
+		};
+		setExperiences([...experiences, newExperience]);
 	};
-	const removeExperience = () => {};
+	const removeExperience = () => {
+		if (experiences.length === 1) return;
+		const RemoveExperience = experiences.slice(0, experiences.length - 1);
+		setExperiences(RemoveExperience);
+	};
 	const saveResume = async () => {
 		try {
 			const res = await saveResumeData({

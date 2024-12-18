@@ -11,7 +11,7 @@ const ResumeEditPage = () => {
 	const ctx = useContext(resumeContext);
 	// const resume = use(getResumeById(id));
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 place-items-center">
+		<div className="grid grid-cols-1 md:grid-cols-2 gap-8 place-items-center">
 			<div className="flex flex-col gap-4 justify-center items-center">
 				<StepsNav />
 				{ctx?.step === 1 && <BasicInfo />}

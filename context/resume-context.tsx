@@ -25,17 +25,25 @@ interface Resume {
 		}>
 	>;
 	experiences: any[];
-	handleResumeChange: (val: string, index: number) => void;
+	handleResumeChange: (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		index: number
+	) => void;
 	updateResume: () => Promise<void>;
-	handleResumeQuill: (value: any, index: any) => void;
-	handleExperienceSubmit: () => void;
 	addExperience: () => void;
 	removeExperience: () => void;
+	handleExperienceSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
 }
-import { getResumeById, saveResumeData, updateResumeById } from "@/lib/actions";
+import {
+	getResumeById,
+	saveResumeData,
+	updateResumeById,
+	updateResumeExperience,
+} from "@/lib/actions";
 import { JsonValue } from "@prisma/client/runtime/library";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import {
+	ChangeEvent,
 	createContext,
 	Dispatch,
 	FormEvent,
@@ -80,6 +88,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	}, [params.id]);
 	const getResume = async () => {
 		const { resume } = await getResumeById(params.id);
+		console.log(resume);
 		if (resume) {
 			setResume(resume);
 		}
@@ -89,11 +98,27 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			setExperiences(resume.experience as any);
 		}
 	}, [resume]);
-	const handleResumeChange = (val: string, index: number) => {};
-	const handleResumeQuill = (value: any, index: number) => {
-		//
+	const handleResumeChange = (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		index: number
+	) => {
+		const newExperience = [...experiences];
+		const { name, value } = e.target;
+		newExperience[index][name] = value;
+		setExperiences(newExperience);
 	};
-	const handleExperienceSubmit = () => {
+	const handleExperienceSubmit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		try {
+			const res = await updateResumeExperience(resume, experiences);
+			if (res?.status === "success") {
+				toast.success(res.message);
+				setResume(res.data!);
+				setStep(4);
+			}
+		} catch (error) {
+			toast.error("Error updating resume experience");
+		}
 		//
 	};
 	const addExperience = () => {
@@ -155,7 +180,6 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				handleResumeChange,
 				addExperience,
 				handleExperienceSubmit,
-				handleResumeQuill,
 				removeExperience,
 				...resume,
 			}}

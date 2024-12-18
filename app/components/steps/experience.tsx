@@ -1,7 +1,8 @@
 import { resumeContext } from "@/context/resume-context";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 const Experience = () => {
+	const [loading, setLoading] = useState(false);
 	const ctx = useContext(resumeContext);
 	const {
 		experiences,
@@ -10,7 +11,17 @@ const Experience = () => {
 		addExperience,
 		removeExperience,
 		title,
+		handleExperienceSummaryGenerate,
 	} = ctx!;
+	const handleSummaryGenerate = async (i: number) => {
+		setLoading(true);
+		try {
+			await handleExperienceSummaryGenerate(i);
+		} catch (error) {
+		} finally {
+			setLoading(false);
+		}
+	};
 	return (
 		<div>
 			<h2 className="text-2xl font-bold mb-4">Experience</h2>
@@ -66,8 +77,21 @@ const Experience = () => {
 										cols={40}
 										value={exp.summary}
 									/>
-									<button className="btn bottom-5 right-5 btn-success text-white min-w-20 absolute">
-										Generate With AI
+									<button
+										onClick={(e) => {
+											e.stopPropagation();
+											handleSummaryGenerate(i);
+										}}
+										type="button"
+										className="btn bottom-5 right-5 btn-success text-white min-w-20 absolute"
+									>
+										{loading ? (
+											<span className="animate-pulse transition-all">
+												Generating...
+											</span>
+										) : (
+											"Generate With AI"
+										)}
 									</button>
 								</div>
 							</div>

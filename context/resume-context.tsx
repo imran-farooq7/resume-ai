@@ -33,14 +33,17 @@ interface Resume {
 	addExperience: () => void;
 	removeExperience: () => void;
 	handleExperienceSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+	handleExperienceSummaryGenerate: (index: number) => Promise<void>;
 }
 import {
+	generateResumeSummary,
 	getResumeById,
 	saveResumeData,
 	updateResumeById,
 	updateResumeExperience,
 } from "@/lib/actions";
 import { JsonValue } from "@prisma/client/runtime/library";
+import exp from "constants";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import {
 	ChangeEvent,
@@ -168,6 +171,30 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			toast.error("An error occurred while updating resume");
 		}
 	};
+	// experience summary handler
+	const handleExperienceSummaryGenerate = async (index: number) => {
+		const selecetedIndex = experiences[index];
+		if (!selecetedIndex || !selecetedIndex.title) {
+			toast.error("Please enter a title");
+			return;
+		}
+		try {
+			const res = await generateResumeSummary(
+				`generate list of duties and responsibilities in bullet list points not in markdown based on job ${selecetedIndex.title}.`
+			);
+			if (res.status === "success") {
+				const updatedExperiences = experiences.slice();
+				updatedExperiences[index] = { ...selecetedIndex, summary: res.text };
+				setExperiences(updatedExperiences);
+				setResume((resume) => ({
+					...resume,
+					experience: updatedExperiences,
+				}));
+			}
+		} catch (error) {
+			toast.error("Error generating experience summary");
+		}
+	};
 	return (
 		<resumeContext.Provider
 			value={{
@@ -181,6 +208,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				addExperience,
 				handleExperienceSubmit,
 				removeExperience,
+				handleExperienceSummaryGenerate,
 				...resume,
 			}}
 		>

@@ -180,7 +180,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		}
 		try {
 			const res = await generateResumeSummary(
-				`generate list of duties and responsibilities in bullet list points not in markdown based on job ${selecetedIndex.title}.`
+				`generate list of duties and responsibilities in bullet list points based on job ${selecetedIndex.title}.`
 			);
 			if (res.status === "success") {
 				const updatedExperiences = experiences.slice();

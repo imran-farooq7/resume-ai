@@ -22,9 +22,11 @@ interface Resume {
 			themeColor: string;
 			summary: string;
 			experience: any;
+			education: any;
 		}>
 	>;
 	experiences: any[];
+	educations: any[];
 	handleResumeChange: (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 		index: number
@@ -34,6 +36,13 @@ interface Resume {
 	removeExperience: () => void;
 	handleExperienceSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
 	handleExperienceSummaryGenerate: (index: number) => Promise<void>;
+	handleEducationSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+	handleEducationChange: (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		index: number
+	) => void;
+	addEducation: () => void;
+	removeEducation: () => void;
 }
 import {
 	generateResumeSummary,
@@ -43,7 +52,6 @@ import {
 	updateResumeExperience,
 } from "@/lib/actions";
 import { JsonValue } from "@prisma/client/runtime/library";
-import exp from "constants";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import {
 	ChangeEvent,
@@ -65,6 +73,7 @@ const intialState = {
 	themeColor: "",
 	summary: "",
 	experience: [] as JsonValue,
+	education: [] as JsonValue,
 };
 export const resumeContext = createContext<Resume | null>(null);
 
@@ -75,6 +84,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const router = useRouter();
 	const params = useParams<{ id: string }>();
 	const [experiences, setExperiences] = useState<any[]>([]);
+	const [educations, setEducations] = useState<any[]>([]);
 	useEffect(() => {
 		const savedResumeData = localStorage.getItem("resume");
 		if (savedResumeData) {
@@ -96,6 +106,39 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			setResume(resume);
 		}
 	};
+
+	const saveResume = async () => {
+		try {
+			const res = await saveResumeData({
+				skills: [],
+				job: "",
+				...resume,
+			});
+			if (res?.status === "success") {
+				setResume({ ...res.data! });
+				localStorage.removeItem("resume");
+				toast.success(res.message);
+				router.push(`/dashboard/resume/edit/${res.data?.id}`);
+				setStep(2);
+			}
+			if (res?.status === "error") {
+				toast.error(res.message);
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("An error occurred while saving");
+		}
+	};
+	const updateResume = async () => {
+		try {
+			const res = await updateResumeById(resume);
+			setResume(res?.data!);
+			toast.success(res?.message!);
+		} catch (error) {
+			toast.error("An error occurred while updating resume");
+		}
+	};
+	// experience stuff
 	useEffect(() => {
 		if (resume.experience) {
 			setExperiences(resume.experience as any);
@@ -139,39 +182,6 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		const RemoveExperience = experiences.slice(0, experiences.length - 1);
 		setExperiences(RemoveExperience);
 	};
-	const saveResume = async () => {
-		try {
-			const res = await saveResumeData({
-				education: [],
-				skills: [],
-				job: "",
-				...resume,
-			});
-			if (res?.status === "success") {
-				setResume({ ...res.data! });
-				localStorage.removeItem("resume");
-				toast.success(res.message);
-				router.push(`/dashboard/resume/edit/${res.data?.id}`);
-				setStep(2);
-			}
-			if (res?.status === "error") {
-				toast.error(res.message);
-			}
-		} catch (error) {
-			console.log(error);
-			toast.error("An error occurred while saving");
-		}
-	};
-	const updateResume = async () => {
-		try {
-			const res = await updateResumeById(resume);
-			setResume(res?.data!);
-			toast.success(res?.message!);
-		} catch (error) {
-			toast.error("An error occurred while updating resume");
-		}
-	};
-	// experience summary handler
 	const handleExperienceSummaryGenerate = async (index: number) => {
 		const selecetedIndex = experiences[index];
 		if (!selecetedIndex || !selecetedIndex.title) {
@@ -195,6 +205,49 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			toast.error("Error generating experience summary");
 		}
 	};
+
+	// Education stuff
+	useEffect(() => {
+		if (resume.education) {
+			setEducations(resume.education as any);
+		}
+	}, [resume]);
+	const handleEducationSubmit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		try {
+			const res = await updateResumeExperience(resume, educations);
+			if (res?.status === "success") {
+				toast.success(res.message);
+				setResume(res.data!);
+				setStep(5);
+			}
+		} catch (error) {
+			toast.error("Error updating resume experience");
+		}
+		//
+	};
+	const handleEducationChange = (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		index: number
+	) => {
+		const newEducation = [...educations];
+		const { name, value } = e.target;
+		newEducation[index][name] = value;
+		setEducations(newEducation);
+	};
+	const addEducation = () => {
+		const newEducation = {
+			year: "",
+			degree: "",
+			university: "",
+		};
+		setEducations([...educations, newEducation]);
+	};
+	const removeEducation = () => {
+		if (educations.length === 1) return;
+		const RemoveEducation = educations.slice(0, educations.length - 1);
+		setEducations(RemoveEducation);
+	};
 	return (
 		<resumeContext.Provider
 			value={{
@@ -209,6 +262,11 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				handleExperienceSubmit,
 				removeExperience,
 				handleExperienceSummaryGenerate,
+				educations,
+				addEducation,
+				removeEducation,
+				handleEducationChange,
+				handleEducationSubmit,
 				...resume,
 			}}
 		>

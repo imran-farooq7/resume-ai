@@ -49,6 +49,7 @@ import {
 	getResumeById,
 	saveResumeData,
 	updateResumeById,
+	updateResumeEducation,
 	updateResumeExperience,
 } from "@/lib/actions";
 import { JsonValue } from "@prisma/client/runtime/library";
@@ -215,14 +216,14 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const handleEducationSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const res = await updateResumeExperience(resume, educations);
+			const res = await updateResumeEducation(resume, educations);
 			if (res?.status === "success") {
 				toast.success(res.message);
 				setResume(res.data!);
 				setStep(5);
 			}
 		} catch (error) {
-			toast.error("Error updating resume experience");
+			toast.error("Error updating resume education");
 		}
 		//
 	};

@@ -234,3 +234,33 @@ export const updateResumeExperience = async (
 		};
 	}
 };
+export const updateResumeEducation = async (
+	resumeData: any,
+	education: any
+) => {
+	const { id } = resumeData;
+	try {
+		await checkResumeOwner(resumeData.id);
+		const resume = await prisma.resume.update({
+			where: {
+				id,
+			},
+			data: {
+				education,
+			},
+		});
+		if (resume) {
+			return {
+				status: "success",
+				message: "Resume was successfully updated",
+				data: resume,
+			};
+		}
+	} catch (error) {
+		console.log(error);
+		return {
+			status: "error",
+			message: "An error occurred while updating the resume",
+		};
+	}
+};

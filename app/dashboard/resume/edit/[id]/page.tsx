@@ -1,6 +1,7 @@
 "use client";
 import PreviewCard from "@/app/components/preview-card/preview-card";
 import BasicInfo from "@/app/components/steps/basic-info-step";
+import Education from "@/app/components/steps/education";
 import Experience from "@/app/components/steps/experience";
 import StepsNav from "@/app/components/steps/steps-nav";
 import Summary from "@/app/components/steps/summary";
@@ -17,6 +18,7 @@ const ResumeEditPage = () => {
 				{ctx?.step === 1 && <BasicInfo />}
 				{ctx?.step === 2 && <Summary />}
 				{ctx?.step === 3 && <Experience />}
+				{ctx?.step === 4 && <Education />}
 			</div>
 			<PreviewCard />
 		</div>

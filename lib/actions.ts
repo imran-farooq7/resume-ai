@@ -10,7 +10,7 @@ export const saveResumeData = async ({
 	title,
 	address,
 	themeColor,
-	skills,
+	skill,
 	experience,
 	education,
 	name,
@@ -22,7 +22,7 @@ export const saveResumeData = async ({
 	job: any;
 	address: any;
 	themeColor: any;
-	skills: any;
+	skill: any;
 	experience: any;
 	education: any;
 	name: any;
@@ -41,7 +41,7 @@ export const saveResumeData = async ({
 		title,
 		address,
 		themeColor,
-		skills,
+		skill,
 		experience,
 		education,
 		name,
@@ -247,6 +247,33 @@ export const updateResumeEducation = async (
 			},
 			data: {
 				education,
+			},
+		});
+		if (resume) {
+			return {
+				status: "success",
+				message: "Resume was successfully updated",
+				data: resume,
+			};
+		}
+	} catch (error) {
+		console.log(error);
+		return {
+			status: "error",
+			message: "An error occurred while updating the resume",
+		};
+	}
+};
+export const updateResumeSkill = async (resumeData: any, skills: any) => {
+	const { id } = resumeData;
+	try {
+		await checkResumeOwner(resumeData.id);
+		const resume = await prisma.resume.update({
+			where: {
+				id,
+			},
+			data: {
+				skill: skills,
 			},
 		});
 		if (resume) {

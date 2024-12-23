@@ -23,10 +23,12 @@ interface Resume {
 			summary: string;
 			experience: any;
 			education: any;
+			skill: any;
 		}>
 	>;
 	experiences: any[];
 	educations: any[];
+	skills: any[];
 	handleResumeChange: (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 		index: number
@@ -51,6 +53,7 @@ import {
 	updateResumeById,
 	updateResumeEducation,
 	updateResumeExperience,
+	updateResumeSkill,
 } from "@/lib/actions";
 import { JsonValue } from "@prisma/client/runtime/library";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -75,6 +78,7 @@ const intialState = {
 	summary: "",
 	experience: [] as JsonValue,
 	education: [] as JsonValue,
+	skill: [] as JsonValue,
 };
 export const resumeContext = createContext<Resume | null>(null);
 
@@ -85,7 +89,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const router = useRouter();
 	const params = useParams<{ id: string }>();
 	const [experiences, setExperiences] = useState<any[]>([]);
+	const [skills, setSkills] = useState<any[]>([]);
 	const [educations, setEducations] = useState<any[]>([]);
+
 	useEffect(() => {
 		const savedResumeData = localStorage.getItem("resume");
 		if (savedResumeData) {
@@ -111,7 +117,6 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const saveResume = async () => {
 		try {
 			const res = await saveResumeData({
-				skills: [],
 				job: "",
 				...resume,
 			});
@@ -140,11 +145,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		}
 	};
 	// experience stuff
-	useEffect(() => {
-		if (resume.experience) {
-			setExperiences(resume.experience as any);
-		}
-	}, [resume]);
+
 	const handleResumeChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 		index: number
@@ -225,7 +226,6 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		} catch (error) {
 			toast.error("Error updating resume education");
 		}
-		//
 	};
 	const handleEducationChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -249,6 +249,29 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		const RemoveEducation = educations.slice(0, educations.length - 1);
 		setEducations(RemoveEducation);
 	};
+	//skills stuff
+	useEffect(() => {
+		if (resume.skill) {
+			setSkills(resume.skill as any);
+		}
+	}, [resume]);
+	const updateSkills = async (skills: any[]) => {
+		const invalidSkills = skills.filter((skill) => !skill.name || !skill.level);
+		if (invalidSkills.length > 0) {
+			toast.error("Please fill in all the fields");
+			return;
+		}
+		try {
+			const res = await updateResumeSkill(resume, skills);
+			if (res?.status === "success") {
+				toast.success(res.message);
+				setResume(res.data!);
+				setStep(6);
+			}
+		} catch (error) {
+			toast.error("Error updating resume education");
+		}
+	};
 	return (
 		<resumeContext.Provider
 			value={{
@@ -264,6 +287,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				removeExperience,
 				handleExperienceSummaryGenerate,
 				educations,
+				skills,
 				addEducation,
 				removeEducation,
 				handleEducationChange,

@@ -5,7 +5,6 @@ const EducationInfo = ({
 }: {
 	resume: Omit<Resume, "id" | "userEmail" | "created_at">;
 }) => {
-	console.log(resume);
 	return (
 		<div>
 			<h2

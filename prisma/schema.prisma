@@ -18,7 +18,7 @@ model Resume {
   themeColor String
   summary    String
   experience Json
-  skills     Json
+  skill      Json
   education  Json
   email      String
   created_at DateTime @default(now())

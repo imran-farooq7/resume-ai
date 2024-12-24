@@ -45,6 +45,13 @@ interface Resume {
 	) => void;
 	addEducation: () => void;
 	removeEducation: () => void;
+	handleSkillsChange: (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		index: number
+	) => void;
+	handleSkillsSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+	addSkill: () => void;
+	removeSkill: () => void;
 }
 import {
 	generateResumeSummary,
@@ -266,11 +273,36 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			if (res?.status === "success") {
 				toast.success(res.message);
 				setResume(res.data!);
-				setStep(6);
+				router.push(`/dashboard/resume/download/${res.data?.id}`);
 			}
 		} catch (error) {
 			toast.error("Error updating resume education");
 		}
+	};
+	const handleSkillsChange = (
+		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		index: number
+	) => {
+		const newSkill = [...skills];
+		const { name, value } = e.target;
+		newSkill[index][name] = value;
+		setSkills(newSkill);
+	};
+	const handleSkillsSubmit = async (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		updateSkills(skills);
+	};
+	const addSkill = () => {
+		const newSkill = {
+			name: "",
+			level: "",
+		};
+		setSkills([...skills, newSkill]);
+	};
+	const removeSkill = () => {
+		if (skills.length === 1) return;
+		const RemoveSkill = skills.slice(0, skills.length - 1);
+		setSkills(RemoveSkill);
 	};
 	return (
 		<resumeContext.Provider
@@ -292,6 +324,10 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				removeEducation,
 				handleEducationChange,
 				handleEducationSubmit,
+				addSkill,
+				handleSkillsChange,
+				handleSkillsSubmit,
+				removeSkill,
 				...resume,
 			}}
 		>

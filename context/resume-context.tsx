@@ -92,7 +92,7 @@ export const resumeContext = createContext<Resume | null>(null);
 export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	const [resume, setResume] = useState(intialState);
 	const pathName = usePathname();
-	const [step, setStep] = useState(3);
+	const [step, setStep] = useState(1);
 	const router = useRouter();
 	const params = useParams<{ id: string }>();
 	const [experiences, setExperiences] = useState<any[]>([]);
@@ -115,7 +115,6 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 	}, [params.id]);
 	const getResume = async () => {
 		const { resume } = await getResumeById(params.id);
-		console.log(resume);
 		if (resume) {
 			setResume(resume);
 		}
@@ -203,6 +202,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 			);
 			if (res.status === "success") {
 				const updatedExperiences = experiences.slice();
+				console.log(updatedExperiences);
 				updatedExperiences[index] = { ...selecetedIndex, summary: res.text };
 				setExperiences(updatedExperiences);
 				setResume((resume) => ({

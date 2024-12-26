@@ -6,12 +6,13 @@ import Experience from "@/app/components/steps/experience";
 import Skills from "@/app/components/steps/skills";
 import StepsNav from "@/app/components/steps/steps-nav";
 import Summary from "@/app/components/steps/summary";
+import Loading from "@/app/loading";
 import { resumeContext } from "@/context/resume-context";
-import { useContext } from "react";
+import { Suspense, useContext } from "react";
 
 const ResumeEditPage = () => {
 	const ctx = useContext(resumeContext);
-	// const resume = use(getResumeById(id));
+
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 gap-8 place-items-center">
 			<div className="flex flex-col gap-4 justify-center items-center">

@@ -4,6 +4,8 @@ import SummaryInfo from "../summary/summary-info";
 import { resumeContext } from "@/context/resume-context";
 import ExperienceInfo from "../experience-info/experience-info";
 import EducationInfo from "../education-info/education-info";
+import SkillsInfo from "../skills-info/skills-info";
+import Loading from "@/app/loading";
 
 const PreviewCard = () => {
 	const ctx = useContext(resumeContext);
@@ -17,6 +19,7 @@ const PreviewCard = () => {
 		title,
 		experience,
 		educations,
+		skills,
 	} = ctx!;
 	const resume = {
 		address,
@@ -26,7 +29,7 @@ const PreviewCard = () => {
 		summary,
 		title,
 		experience,
-		skills: [],
+		skill: skills,
 		education: educations,
 		themeColor,
 	};
@@ -40,6 +43,7 @@ const PreviewCard = () => {
 			<SummaryInfo resume={resume} />
 			<ExperienceInfo resume={resume} />
 			<EducationInfo resume={resume} />
+			<SkillsInfo resume={resume} />
 		</div>
 	);
 };

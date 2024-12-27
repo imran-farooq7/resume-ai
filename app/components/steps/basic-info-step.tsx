@@ -1,6 +1,7 @@
 import { resumeContext } from "@/context/resume-context";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import React, { ChangeEvent, FormEvent, useContext } from "react";
+import { HexColorPicker } from "react-colorful";
 
 const BasicInfo = () => {
 	const ctx = useContext(resumeContext);
@@ -12,9 +13,9 @@ const BasicInfo = () => {
 		address,
 		email,
 		phone,
-		saveResume,
 		updateResume,
 		setStep,
+		themeColor,
 	} = ctx!;
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -32,11 +33,11 @@ const BasicInfo = () => {
 			return updatedResume;
 		});
 	};
+
 	return (
 		<form onSubmit={handleSubmit} className="w-full">
 			<div className="flex flex-col gap-y-4">
 				<h2 className="text-2xl font-bold">Personal information</h2>
-
 				<input
 					type="text"
 					name="name"
@@ -81,6 +82,12 @@ const BasicInfo = () => {
 					name="phone"
 					onChange={handleChange}
 					required
+				/>
+				<HexColorPicker
+					color={themeColor}
+					onChange={(themeColor) =>
+						setResume((resume) => ({ ...resume, themeColor }))
+					}
 				/>
 				{isSignedIn ? (
 					<button className="btn btn-neutral">Save</button>

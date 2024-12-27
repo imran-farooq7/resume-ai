@@ -11,13 +11,7 @@ const Skills = () => {
 		addSkill,
 		removeSkill,
 	} = ctx!;
-	const skillsLevel = [
-		{ value: 1, label: "Poor" },
-		{ value: 2, label: "Basic" },
-		{ value: 3, label: "intermediate" },
-		{ value: 4, label: "Advanced" },
-		{ value: 5, label: "Expert" },
-	];
+
 	return (
 		<div>
 			<h2 className="text-2xl font-bold mb-4">Skills</h2>

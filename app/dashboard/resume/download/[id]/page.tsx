@@ -1,10 +1,10 @@
 const ResumeDownload = () => {
 	return (
-		<div className="min-h-screen flex flex-col justify-center">
+		<div className="min-h-screen flex flex-col gap-8 justify-center items-center">
 			<h2 className="text-3xl text-center font-bold">
-				Hurray! your AI powered resume is ready to download or print.
+				🎉Hurray your AI powered resume is ready to download or print.
 			</h2>
-			<div className="flex justify-between">
+			<div className="flex gap-10">
 				<button className="btn btn-success text-white min-w-20">
 					Download
 				</button>

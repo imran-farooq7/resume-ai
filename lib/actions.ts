@@ -82,7 +82,7 @@ export const getUserResumes = async () => {
 	try {
 		const resumes = await prisma.resume.findMany({
 			where: {
-				email: user.emailAddresses[0].emailAddress,
+				userEmail: user.emailAddresses[0].emailAddress,
 			},
 		});
 		return {
@@ -109,7 +109,7 @@ export const getResumeById = async (id: string) => {
 	try {
 		const resume = await prisma.resume.findUnique({
 			where: {
-				email: user.emailAddresses[0].emailAddress,
+				userEmail: user.emailAddresses[0].emailAddress,
 				id,
 			},
 		});
@@ -288,6 +288,28 @@ export const updateResumeSkill = async (resumeData: any, skills: any) => {
 		return {
 			status: "error",
 			message: "An error occurred while updating the resume",
+		};
+	}
+};
+export const deleteResume = async (id: string) => {
+	try {
+		await checkResumeOwner(id);
+
+		const resume = await prisma.resume.delete({
+			where: {
+				id,
+			},
+		});
+		return {
+			resume,
+			status: "success",
+			message: "Resumes deleted successfully",
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			status: "error",
+			message: "Error deleting resume",
 		};
 	}
 };

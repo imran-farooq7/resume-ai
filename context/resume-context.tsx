@@ -52,8 +52,10 @@ interface Resume {
 	handleSkillsSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
 	addSkill: () => void;
 	removeSkill: () => void;
+	handleDeleteResume: (id: string) => Promise<void>;
 }
 import {
+	deleteResume,
 	generateResumeSummary,
 	getResumeById,
 	saveResumeData,
@@ -159,6 +161,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		const newExperience = [...experiences];
 		const { name, value } = e.target;
 		newExperience[index][name] = value;
+		console.log(newExperience);
 		setExperiences(newExperience);
 	};
 	const handleExperienceSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -304,6 +307,17 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		const RemoveSkill = skills.slice(0, skills.length - 1);
 		setSkills(RemoveSkill);
 	};
+	const handleDeleteResume = async (id: string) => {
+		try {
+			const res = await deleteResume(id);
+			if (res.status === "success") {
+				toast.success(res.message);
+				router.refresh();
+			}
+		} catch (error) {
+			toast.error("Error deleting resume");
+		}
+	};
 	return (
 		<resumeContext.Provider
 			value={{
@@ -328,6 +342,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 				handleSkillsChange,
 				handleSkillsSubmit,
 				removeSkill,
+				handleDeleteResume,
 				...resume,
 			}}
 		>

@@ -73,7 +73,9 @@ const BasicInfoCreate = () => {
 					required
 				/>
 				{isSignedIn ? (
-					<button className="btn btn-neutral">Save</button>
+					<button type="submit" className="btn btn-neutral">
+						Save
+					</button>
 				) : (
 					<SignInButton>
 						<button className="btn btn-neutral">Signin to save info</button>

@@ -1,10 +1,14 @@
+"use client";
 import { Resume } from "@prisma/client";
-import PersonalInfo from "../personal-info/personal-info";
 import Link from "next/link";
+import PersonalInfo from "../personal-info/personal-info";
 import SummaryInfo from "../summary/summary-info";
-import ExperienceInfo from "../experience-info/experience-info";
+import { useContext } from "react";
+import { resumeContext } from "@/context/resume-context";
 
 const ResumeCard = ({ resume }: { resume: Resume }) => {
+	const ctx = useContext(resumeContext);
+	const { handleDeleteResume } = ctx!;
 	return (
 		<div className="flex flex-col gap-y-8">
 			<Link
@@ -31,7 +35,12 @@ const ResumeCard = ({ resume }: { resume: Resume }) => {
 					Edit
 				</Link>
 
-				<button className="btn btn-error text-white min-w-20">Delete</button>
+				<button
+					onClick={() => handleDeleteResume(resume.id)}
+					className="btn btn-error text-white min-w-20"
+				>
+					Delete
+				</button>
 			</div>
 		</div>
 	);

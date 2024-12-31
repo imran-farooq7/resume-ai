@@ -5,7 +5,7 @@ const Experience = () => {
 	const [loading, setLoading] = useState(false);
 	const ctx = useContext(resumeContext);
 	const {
-		experience,
+		experiences,
 		handleResumeChange,
 		handleExperienceSubmit,
 		addExperience,
@@ -27,8 +27,8 @@ const Experience = () => {
 			<h2 className="text-2xl font-bold mb-4">Experience</h2>
 
 			<form className="w-full" onSubmit={handleExperienceSubmit}>
-				{experience &&
-					experience.map((exp: any, i: number) => {
+				{experiences &&
+					experiences.map((exp: any, i: number) => {
 						return (
 							<div key={i} className="mb-5 space-y-4">
 								<input
@@ -104,7 +104,7 @@ const Experience = () => {
 					>
 						Add
 					</button>
-					{experience.length > 1 && (
+					{experiences.length > 1 && (
 						<button
 							onClick={removeExperience}
 							className="btn btn-error text-white min-w-20"

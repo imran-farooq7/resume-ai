@@ -1,3 +1,4 @@
+"use client";
 import { useContext } from "react";
 import PersonalInfo from "../personal-info/personal-info";
 import SummaryInfo from "../summary/summary-info";

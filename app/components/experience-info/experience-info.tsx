@@ -1,3 +1,4 @@
+"use client";
 import { Resume } from "@prisma/client";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 

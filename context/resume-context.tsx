@@ -106,9 +106,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 		if (savedResumeData) {
 			setResume(JSON.parse(savedResumeData));
 		}
-		if (pathName.includes("/create")) {
-			setResume(intialState);
-		}
+		// if (pathName.includes("/create")) {
+		// 	setResume(intialState);
+		// }
 	}, []);
 	useEffect(() => {
 		if (params.id) {

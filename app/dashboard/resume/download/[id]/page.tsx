@@ -10,6 +10,14 @@ import { getResumeById } from "@/lib/actions";
 interface Props {
 	params: Promise<{ id: string }>;
 }
+export const generateMetadata = async ({ params }: Props) => {
+	const { id } = await params;
+	const resume = await getResumeById(id);
+	return {
+		title: `${resume.resume?.name}'s Resume`,
+		description: `${resume.resume?.summary}`,
+	};
+};
 const ResumeDownload = async ({ params }: Props) => {
 	const { id } = await params;
 	const resume = await getResumeById(id);

@@ -78,7 +78,9 @@ const BasicInfoCreate = () => {
 					</button>
 				) : (
 					<SignInButton>
-						<button className="btn btn-neutral">Signin to save info</button>
+						<button className="btn btn-success text-white">
+							Signin to save info
+						</button>
 					</SignInButton>
 				)}
 			</div>

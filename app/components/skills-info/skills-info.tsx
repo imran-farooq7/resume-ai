@@ -14,21 +14,22 @@ const SkillsInfo = ({
 				Skills
 			</h2>
 			<hr style={{ borderColor: resume.themeColor }} />
-
-			{resume?.skill
-				// @ts-ignore
-				?.map((skill, i) => {
-					return (
-						<div key={i} className="mt-4">
-							<h2 className="font-bold mb-1">{skill.name}</h2>
-							<progress
-								className="progress progress-success w-56"
-								value={skill.level}
-								max="5"
-							></progress>
-						</div>
-					);
-				})}
+			<div className="grid grid-cols-2">
+				{resume?.skill
+					// @ts-ignore
+					?.map((skill, i) => {
+						return (
+							<div key={i} className="mt-4 gap-2">
+								<h2 className="font-bold mb-1">{skill.name}</h2>
+								<progress
+									className="progress progress-success w-56"
+									value={skill.level}
+									max="5"
+								></progress>
+							</div>
+						);
+					})}
+			</div>
 		</div>
 	);
 };

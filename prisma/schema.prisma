@@ -9,17 +9,16 @@ datasource db {
 }
 
 model Resume {
-  id         String   @id @default(cuid())
+  id         String @id @default(cuid())
   userEmail  String
   title      String
-  name       String
   phone      String
   address    String
-  themeColor String
-  summary    String
-  experience Json
-  skill      Json
-  education  Json
+  name       String
   email      String
-  created_at DateTime @default(now())
+  summary    String
+  skill      Json[]
+  experience Json[]
+  education  Json[]
+  themeColor String
 }

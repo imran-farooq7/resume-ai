@@ -3,71 +3,100 @@
 import prisma from "@/prisma/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Prisma, Resume } from "@prisma/client";
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY!);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-export const saveResumeData = async ({
-	title,
-	address,
-	themeColor,
-	skill,
-	experience,
-	education,
-	name,
-	summary,
-	phone,
-	email,
-}: {
-	title: any;
-	job: any;
-	address: any;
-	themeColor: any;
-	skill: any;
-	experience: any;
-	education: any;
-	name: any;
-	summary: any;
-	phone: any;
-	email: any;
-}) => {
+// export const saveResumeData = async ({
+// 	title,
+// 	address,
+// 	themeColor,
+// 	skill,
+// 	experience,
+// 	education,
+// 	name,
+// 	summary,
+// 	phone,
+// 	email,
+// }: {
+// 	title: any;
+// 	job: any;
+// 	address: any;
+// 	themeColor: any;
+// 	skill: any;
+// 	experience: any;
+// 	education: any;
+// 	name: any;
+// 	summary: any;
+// 	phone: any;
+// 	email: any;
+// }) => {
+// 	const user = await currentUser();
+// 	if (!user?.emailAddresses) {
+// 		return {
+// 			status: "error",
+// 			message: "you must be login to save resume data",
+// 		};
+// 	}
+// 	const data = {
+// 		title,
+// 		address,
+// 		themeColor,
+// 		skill,
+// 		experience,
+// 		education,
+// 		name,
+// 		summary,
+// 		phone,
+// 		email,
+// 		userEmail: user.emailAddresses[0].emailAddress,
+// 	};
+// 	try {
+// 		const resumeData = await prisma.resume.create({
+// 			data: {
+// 				...data,
+// 			},
+// 		});
+// 		if (resumeData) {
+// 			return {
+// 				status: "success",
+// 				message: "Resume data saved successfully",
+// 				data: resumeData,
+// 			};
+// 		}
+// 	} catch (error) {
+// 		console.log(error, "Error");
+// 		return {
+// 			status: "error",
+// 			message: "something went wrong",
+// 		};
+// 	}
+// };
+export const saveResumeToDb = async (
+	resume: Omit<Resume, "id" | "userEmail">
+) => {
 	const user = await currentUser();
-	if (!user?.emailAddresses) {
-		return {
-			status: "error",
-			message: "you must be login to save resume data",
-		};
-	}
-	const data = {
-		title,
-		address,
-		themeColor,
-		skill,
-		experience,
-		education,
-		name,
-		summary,
-		phone,
-		email,
-		userEmail: user.emailAddresses[0].emailAddress,
-	};
+	const userEmail = user?.emailAddresses[0].emailAddress;
 	try {
 		const resumeData = await prisma.resume.create({
 			data: {
-				...data,
+				userEmail: userEmail!,
+				...resume,
+				skill: resume.skill as Prisma.InputJsonValue[],
+				experience: resume.experience as Prisma.InputJsonValue[],
+				education: resume.education as Prisma.InputJsonValue[],
 			},
 		});
-		if (resumeData) {
-			return {
-				status: "success",
-				message: "Resume data saved successfully",
-				data: resumeData,
-			};
-		}
+		return {
+			status: "success",
+			message: "Resume created successfully",
+			data: resumeData,
+		};
 	} catch (error) {
-		console.log(error, "Error");
+		console.log(error);
 		return {
 			status: "error",
-			message: "something went wrong",
+			message: "Error creating resume",
 		};
 	}
 };

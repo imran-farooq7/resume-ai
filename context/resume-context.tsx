@@ -58,7 +58,7 @@ import {
 	deleteResume,
 	generateResumeSummary,
 	getResumeById,
-	saveResumeData,
+	saveResumeToDb,
 	updateResumeById,
 	updateResumeEducation,
 	updateResumeExperience,
@@ -85,9 +85,9 @@ const intialState = {
 	phone: "",
 	themeColor: "",
 	summary: "",
-	experience: [] as JsonValue,
-	education: [] as JsonValue,
-	skill: [] as JsonValue,
+	experience: [] as JsonValue[],
+	education: [] as JsonValue[],
+	skill: [] as JsonValue[],
 };
 export const resumeContext = createContext<Resume | null>(null);
 
@@ -124,8 +124,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 
 	const saveResume = async () => {
 		try {
-			const res = await saveResumeData({
-				job: "",
+			const res = await saveResumeToDb({
 				...resume,
 			});
 			if (res?.status === "success") {
